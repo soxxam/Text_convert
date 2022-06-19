@@ -1,7 +1,7 @@
 const AccountModel = require('../../models/Account');
 const BillModel = require('../../models/Bill');
 const bcrypt = require('bcrypt');
-
+const ConvertModel = require('../../models/Convert');
 
 const index = async(req,res)=>{
     const user = req.session.account;
@@ -11,8 +11,9 @@ const index = async(req,res)=>{
         total += item.totalPrice
     }
     const bills = await BillModel.find().populate({path:"priceId"}).populate({path:"userId"}).limit(5);
-
-    res.render('admin/dashboard',{user,total,bills,bill})
+    const imageToText = await ConvertModel.findOne({name:"Ảnh Sang Văn Bản"})
+    const pdfToText = await ConvertModel.findOne({name:"PDF Sang Văn Bản"})
+    res.render('admin/dashboard',{user,total,bills,bill,imageToText,pdfToText})
 }
 
 const getLogin = async(req,res)=>{

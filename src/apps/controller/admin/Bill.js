@@ -9,7 +9,7 @@ const index = async(req,res)=>{
     const skip = limit * (page - 1);
     const total = await BillModel.find().countDocuments();
     totalPage = Math.ceil(total / limit);
-    const bills = await BillModel.find().populate({path:"priceId"}).populate({path:"userId"}).skip(skip).limit(limit).sort({ _id: 1 });
+    const bills = await BillModel.find().populate({path:"userId"}).populate({path:"priceId"}).skip(skip).limit(limit).sort({ _id: 1 });
     res.render("admin/Bill/index",{
         bills,
         pages: paginate(page, totalPage),

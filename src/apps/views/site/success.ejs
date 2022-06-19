@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <%-include("components/head.ejs") %>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link href="static/site/css/pdf.css" rel="stylesheet" type="text/css">
+  <link href="static/site/css/header.css" rel="stylesheet" type="text/css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">        
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.css">
+  <link rel="stylesheet" href="static/site/css/style.css">
+	<style>
+		.btn-check{
+			position: relative;
+		}
+		@keyframes example {
+			from {
+				height:360px;
+			}
+			to {
+				height: 760px;
+			}
+		}
+		@keyframes add {
+			from {
+				height:760px;
+			}
+			to {
+				height: 360px;
+			}
+			}
+		.animation-delete{
+			animation-name:example;
+			animation-duration: 1s;
+	
+		}
+		.animation-add{
+			animation-name:add;
+			animation-duration: 1s;
+		}
+		#imageToText:hover{
+			text-decoration: none;
+			background-color:rgb(13,172,177);
+			border-radius:4px
+	
+		}
+		#imageToText:hover #imgText{
+			color:white
+		}
+		#pdfToText:hover{
+			text-decoration: none;
+			background-color:rgb(55 137 220);
+			border-radius:4px
+		}
+		#pdfToText:hover #pdfText{
+			color:white
+		}
+    input{
+    line-height: 18px;
+    font-size: 14px;
+    font-family: "Source Sans Pro", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    font-weight: 400;
+    color: rgb(33, 33, 33);
+    display: block;
+    width: 334px;
+    height: 40px;
+    box-sizing: border-box;
+    border: 1px solid #ccc; 
+    border-radius: 0px;
+    outline: none;
+    background: transparent;
+    box-shadow: none;
+    padding:12px
+  }
+  input:focus{
+    border:1px solid red;
+  }
+  .name{
+    margin-top:32px
+  }
+  .navItem:hover{
+    background-color:rgb(244, 244, 244)
+  }
+	</style>
+<script>
+	let day = new Date()
+	localStorage.setItem("day",day.getHours() + ":" + day.getMinutes() + ":" + day.getSeconds())
+    if(!localStorage.getItem("convert_count")){
+        localStorage.setItem("convert_count",3)
+		
+    }
+	else{
+		if(localStorage.getItem("User")){
+			let user = localStorage.getItem("User")
+			if(JSON.parse(user).PriceId){
+				localStorage.setItem("convert_count",JSON.parse(localStorage.getItem("User")).convertCount)
+			}
+		}
+	}
+	let date = localStorage.getItem("day")
+	let hour = localStorage.getItem("day").slice(0,1)
+	console.log(hour)
+	if(hour == "0"){
+		localStorage.setItem("convert_count",3)
+		if(localStorage.getItem("User")){
+			let user = localStorage.getItem("User")
+			if(JSON.parse(user).PriceId){
+				localStorage.setItem("convert_count",JSON.parse(localStorage.getItem("User")).convertCount)
+			}
+		}
+	}
+</script>
+<body>
+    <div style="margin: auto;align-items: center">
+        <img src="static/site/assest/header--logo.png" alt="" style="width: 200px; height:200px;margin-left: 656px;">
+
+        <h1 style="text-align:center;">Cảm ơn bạn đã đăng kí gói premium của LK Convert</h1>
+        <h2 style="text-align:center;">Xin hãy bấm nút phía dưới để xác nhận</h2>
+        <form method = "Post" onsubmit = post() style="text-align:center;margin-top:40px">
+            <input type="hidden" name="userId" id="userId">
+            <button style="background-color:red;border: none;width:180px;height:60px;color:white" type="submit" name="" value="Xác nhận">Xác nhận</button>
+        </form>
+    </div>
+</body>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    if(localStorage.getItem("User")){
+        document.getElementById("userId").value = JSON.parse(localStorage.getItem("User"))._id
+    }
+    async function post(){
+        event.preventDefault()
+        let userId = document.getElementById("userId").value;
+        const data = await axios.post("/checkSuccess",{
+            userId,
+        })
+        localStorage.setItem("User",JSON.stringify(data.data.user));
+        window.location.href="/home"
+}
+</script>
+</html>

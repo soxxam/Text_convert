@@ -1,0 +1,44 @@
+#container{
+    text-align-last: center;
+    padding: 80px;
+}
+.title{
+    color: #fff;
+    font-size:40px
+}
+.container_file{
+    border: 1px solid #fff;
+    max-width: 800px;
+    margin:auto;
+    padding:18px;
+    background-color: #ccc;
+    height:260px
+}
+.container_file-title{
+    color: #fff;
+    font-size:24px
+}
+.file{
+    background-color:#fff;
+    border: 1px solid #fff;
+    padding:20px;
+    margin-top: 20px;
+    display:flex;
+    justify-content:space-between
+}
+.name_file{
+    width: 60%;
+    border-right: 1px solid #ccc;
+}
+.down{
+    margin-top:36px;
+    text-align-last: right;    
+}
+.btn_down{
+    background-color: #745eb1;
+    padding:10px;
+    color:white
+}
+.btn_down:hover{
+    text-decoration:none
+}

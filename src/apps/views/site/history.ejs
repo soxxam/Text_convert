@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="static/site/css/pdf.css" rel="stylesheet" type="text/css">
+    <link href="static/site/css/header.css" rel="stylesheet" type="text/css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">        
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.css">
+    <link rel="stylesheet" href="static/site/css/style.css">
+    <script>
+      let day = new Date()
+      localStorage.setItem("day",day.getHours() + ":" + day.getMinutes() + ":" + day.getSeconds())
+        if(!localStorage.getItem("convert_count")){
+            localStorage.setItem("convert_count",3)
+        
+        }
+      else{
+        if(localStorage.getItem("User")){
+          let user = localStorage.getItem("User")
+          if(JSON.parse(user).PriceId){
+            localStorage.setItem("convert_count",JSON.parse(localStorage.getItem("User")).convertCount)
+          }
+        }
+      }
+      let date = localStorage.getItem("day")
+      let hour = localStorage.getItem("day").slice(0,1)
+      console.log(hour)
+      if(hour == "0"){
+        localStorage.setItem("convert_count",3)
+        if(localStorage.getItem("User")){
+          let user = localStorage.getItem("User")
+          if(JSON.parse(user).PriceId){
+            localStorage.setItem("convert_count",JSON.parse(localStorage.getItem("User")).convertCount)
+          }
+        }
+      }
+    </script>
+    <style>
+        .dropdown-menu[data-bs-popper] {
+          top: 100%;
+          left:-322px;
+          margin-top: var(--bs-dropdown-spacer);
+        } 
+        .dropdown-item:hover{
+          background:none
+        }
+        #user-image{
+          /* background: yellow; */
+          width: 50px;
+          height: 50px;
+          border-radius: 100%;    
+          padding:9px;
+        }
+        #user_image{
+          /* background: yellow; */
+          width: 50px;
+          height: 50px;
+          border-radius: 100%;    
+          padding:9px;
+        }
+        #user-image{
+          /* background: yellow; */
+          width: 50px;
+          height: 50px;
+          border-radius: 100%;    
+          padding:9px;
+        }
+        #firstname {
+          font-size:20px;
+          text-align:center;
+        }
+        #first{
+          font-size:20px;
+          text-align:center;
+        }
+        select {
+          background:transparent !important;
+          margin-bottom: 1em;
+          padding: .25em;
+          border: 0;
+          border-bottom: 2px solid currentcolor; 
+          font-weight: bold;
+          letter-spacing: .15em;
+          border-radius: 0;
+        }
+        .imgName{
+          width: 240px;
+          margin-left: 32px;
+        }
+        .imgOption{
+          padding: 30px;
+        }
+        @keyframes example {
+          from {
+            transform: translateY(0);
+            opacity: 1;
+          }
+          to {
+            transform: translateY(-50%);
+            opacity: 0;
+          }
+        }
+        .animation-delete{
+          height:86px;
+          animation-name:example;
+          animation-duration: 1s;
+        }
+        
+        #imageToText:hover{
+            text-decoration: none;
+            background-color:rgb(13,172,177);
+            border-radius:4px
+
+          }
+          #imageToText:hover #imgText{
+            color:white
+          }
+          #pdfToText:hover{
+            text-decoration: none;
+            background-color:rgb(55 137 220);
+            border-radius:4px
+          }
+          #pdfToText:hover #pdfText{
+            color:white
+          }
+        
+        
+    </style>
+</head>
+<body style="background: #fff !important;">
+  <%-include("components/header.ejs") %>
+
+
+      <div id="body" >
+      <div class="nk-sidebar" style="margin-top:3px;background-color: rgb(230, 228, 228);height: 180px;      ">           
+        <div class="nk-nav-scroll">
+            <ul class="metismenu" id="menu" style="background-color: rgb(230, 228, 228);">
+              <li style="height:100px">
+                <div id="user_avatar" style="height:100px">
+                  <p id="firstNameUser" style="color:white;text-align:center;margin-top:32px;font-size:22px"></p>
+                </div>
+              </li>    
+              <li>
+                    <ul aria-expanded="false">
+                        <li style="height:60px"><a href="/historyConvert-<%=id%>" style="font-weight: 700;font-size: 16px;">Lịch sử chuyển đổi</a></li>
+                        <li style="height:60px"><a href="/setting-<%=id%>" style="font-weight: 700;font-size: 16px;">Điều khiển</a></li>
+                    </ul>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+    
+      <div id="container" class="content-body">
+        <div class="container-fluid">
+            <div class="col-lg-12">
+              <div class="card">
+                  <div class="card-body">
+                    <div class="card-title" style="border-bottom:1px solid #ccc;padding:20px">
+                      <h4>History Convert</h4>
+                    </div>
+                    
+                      <div class="table-responsive">
+                          <table class="table table-striped">
+                              <thead>
+                                  <tr>
+                                      <th>Name</th>
+                                      <th>File Convert</th>
+                                      <th>Size</th>
+                                      <th>Date</th>
+                                      <th>Action</th>
+                                  </tr>
+                              </thead>
+                              <tbody id="fileList">
+                                <%for(let item of file){%>
+                                  <%if(item.type){%>
+                                  <tr class="itemFile">
+                                      <td style="display: flex;">
+                                        <%if(item.type == 'picture'){%>
+                                          <%if(item.img.length == 1){%>
+                                            <img src="static/site/imageToText/<%=item.numfile%>/<%=item.img[0]%>" alt="" style="width:60px;height:60px;object-fit: cover;">
+                                              <p style="margin-left:36px;font-weight:bold; letter-spacing: .15em;margin-top:18px"><%=item.img[0]%></p>
+                                          <%}else{%>
+                                            <input type="hidden" class="numfile" value="<%=item.numfile%>">
+                                            <img class="imageName" src="static/site/imageToText/<%=item.numfile%>/<%=item.img[0]%>" alt="" style="width:60px;height:60px;object-fit: cover;">
+                                            <select class="imgName" onchange=changeOption()>
+                                              <%for(let img of item.img){%>
+                                                <option class="imgOption" value="<%=img%>"><%=img%></option>
+                                              <%}%>
+                                            </select>
+
+                                          <%}%>
+                                            
+                                          <%}else{%>
+                                            <img src="static/site/assest/pdf-icon.png" alt="" style="width:60px;height:60px;object-fit: cover;">
+                                            <p style="margin-left:36px;font-weight:bold; letter-spacing: .15em;margin-top:18px"><%=item.img[0]%></p>
+                                          
+                                        <%}%>
+
+                                      </td>
+                                      <td><%=item.name%></td>
+                                      <td><span class="badge badge-primary px-2"><%=item.size%></span>
+                                      </td>
+                                      <td><%=item.day%></td>
+                                      <td class="color-primary">
+                                        <div class="dropdown">
+                                          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" style="background-color:rgb(126, 126, 241)">
+                                              ...
+                                          </button>
+                                          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                            <form method="post" class="formDelete">
+                                              <input type="hidden" class="fileId" name = "id" value="<%=item._id%>">
+                                            <li style="display: flex;justify-content:flex-start;"><a class="dropdown-item" href="#" > 
+                                              <img src="static/site/assest/trash.png" alt="" style="width: 18px;height: 18px;"> 
+                                              <button type="submit" style="margin-left: 12px;border:none">Delete</button> 
+                                            </a></li>
+                                            </form>
+                                            <li><a class="dropdown-item" href="/download?id=<%=item._id%>" style="display: flex;justify-content:flex-start">
+                                              <img src="static/site/assest/download.png" alt="" style="width: 18px;height: 18px;">
+                                              <span style="margin-left: 12px;">Download</span> 
+                                            </a></li>
+                                          </ul>
+                                        </div>
+                                    </td>
+                                  </tr>
+                                  <%}%>
+                                <%}%>
+
+                              </tbody>
+                          </table>
+                          
+            
+                      </div>
+                  </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</body>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+<script>
+     if(localStorage.getItem("User")){
+      let url = '/historyConvert-'+JSON.parse(localStorage.getItem("User"))._id;
+      document.getElementById("history").setAttribute("href", url);
+      document.getElementById("firstNameUser").innerHTML = JSON.parse(localStorage.getItem("User")).username
+      document.getElementById("user_avatar").style.background='#'+localStorage.getItem("color")
+    }
+    function changeColor(){
+      document.getElementById("drop").style.boxShadow = "none"
+      console.log("a")
+    }
+    function logOut(){
+      localStorage.removeItem("User")
+      localStorage.removeItem("color")
+      if(!localStorage.getItem("User")){
+        document.getElementById("account").style.display="none"
+        document.getElementById("login").innerHTML = `<div> 
+          <a href="/login" style="color:black;font-size:18px"">Login</a>  
+        <div>`
+      }
+    }
+    if(!localStorage.getItem("User")){
+        document.getElementById("account").style.display="none"
+        document.getElementById("login").innerHTML = `<div> 
+          <a href="/login" style="color:black;font-size:18px"">Login</a>  
+        <div>`
+    }
+
+    list = document.getElementsByClassName("imgName")
+    for (let i= 0; i < list.length; ++i) {
+        list[i].onchange = function () {
+          let val = list[i].value;
+          let numfile = document.getElementsByClassName("numfile")[i].value;
+          document.getElementsByClassName("imageName")[i].setAttribute("src", `static/site/imageToText/${numfile}/${val}`)
+        }
+      }
+      let listForm = document.getElementsByClassName("formDelete");
+      for (let i= 0; i < listForm.length; ++i) {
+        listForm[i].onsubmit = async function(event){
+          event.preventDefault();
+          let id = document.getElementsByClassName("fileId")[i].value;
+          console.log(id);
+          let userId = JSON.parse(localStorage.getItem("User"))._id;
+          const data = await axios.post(`/deleteFile/${userId}/${id}`,{
+            userId,
+            id,
+          })
+          console.log(data.data.file)
+          document.getElementsByClassName("itemFile")[i].remove()
+      }
+
+
+
+      }
+      
+      
+    
+</script>
+<script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script src="static/site/js/pdf.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+</html>

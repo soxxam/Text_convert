@@ -1,0 +1,161 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-white py-3 shadow-sm" style="height:83px;border:1px solid #ccc">
+    <div style="margin-left: 100px;">
+      <img src="static/site/assest/logo_transparent.png" alt="" style="width: 100px; height:100px;overflow: hidden">
+      <a href="/home" style="font-size:18px;font-weight:bold;color:black">LKConvert</a>
+    </div>
+    <div id="navbarContent" class="collapse navbar-collapse">
+      <ul class="navbar-nav mx-auto">
+        <!-- Megamenu -->
+        <li class="nav-item dropdown megamenu"><a href="#" id="megamneu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle font-weight-bold text-uppercase">Các Công Cụ</a>
+          <div aria-labelledby="megamneu" class="dropdown-menu border-0 p-0 m-0" > 
+            <div class="container" style="width: 972px;margin-top:22px">
+              <div class="row bg-white rounded-0 m-0 shadow-sm">
+                <div class="col-lg-7 col-xl-8">
+                  <div class="p-4">
+                    <div class="row">
+                      <div class="listTool" >
+                        <a href="/imageToText" id="imageToText" style="display:flex;color:black;padding:8px;width:260px;">
+                          <div style="background:rgb(13,172,177);width:36px;height:36px;padding:3px;border-radius: 3px;margin-top: 3px;">
+                            <img src="static/site/assest/img.png" alt="" style="width: 30px;height: 30px;">
+                          </div>
+                          <p id="imgText" style="margin-left: 10px;margin-top: 8px;">Ảnh sang văn bản</p>
+                        </a>
+                        <a href="/pdfToText" id="pdfToText" style="display:flex;color:black;padding:8px;width:260px;">
+                          <div style="background:rgb(55 137 220);width:36px;height:36px;padding:3px;border-radius: 3px;margin-top: 3px;">
+                            <img src="static/site/assest/pdfwhite.png" alt="" style="width: 30px;height: 30px;">
+                          </div>
+                          <p id="pdfText" style="margin-left: 10px;margin-top: 8px;">PDF sang văn bản</p>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-5 col-xl-4 px-0 d-none d-lg-block" style="background: center center no-repeat; background-size: cover;background:white">
+                  <img src="static/site/assest/logo_transparent.png" alt="" style="width: 200px; height:200px;margin-left:60px;overflow: hidden">
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="nav-item dropdown" >
+          
+        </li>
+      </ul>
+    </div>
+    <div id="login">
+      <div id = "account" onClick=changeColor() class="dropdown" style="margin-top:10px;margin-right: 50px;">
+        <button id="drop" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" style="background: white;border: none;margin-right: 160px;display: flex;">
+          <div class="user-image">
+            <p class="firstname" style="color:black"></p>
+          </div>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" style="margin-top:6px;width: 300px;height:308px;margin-left: 98px;background:white;color:white;border: none;box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;">
+          <li style="display:flex;border-bottom:1px solid #ccc;height: 100px;padding: 32px;justify-content: space-around;">
+            <div class="user-image">
+              <p class="firstname" style="color:black"></p>
+            </div>
+            <div class="info" style="text-align:justify;height: 100%;" >
+              <p id="username" style="color:black;margin-left:14px;float:left;margin-top: -10px;font-size: 13px;font-weight:bold"></p>
+              <p id="email" style="color:black;margin-left:14px;margin-top: -18px;font-size: 13px;"></p>
+            </div>
+          </li>
+          <li class="dropdown-item" style="border-bottom:1px solid #ccc;padding: 8px;"><a class="dropdown-item" id="history" href="" style="color:black">
+            <div style="display: flex;justify-content: space-between;">
+              <div style="display:flex;justify-content:flex-start">
+                <img src="static/site/assest/history.png" alt="" style="width: 26px; height:26px;margin-right: 18px;">
+                Lịch sử chuyển đổi
+              </div>
+              <img src="static/site/assest/right.png" style="width: 26px; height:26px" alt="">
+            </div>
+            </a>
+          </li>
+          <li class="dropdown-item" style="border-bottom:1px solid #ccc;padding: 8px;"><a class="dropdown-item" id="setting" href="#" style="color:black">
+            <div style="display: flex;justify-content: space-between;">
+              <div style="display:flex;justify-content:flex-start">
+                <img src="static/site/assest/setting.png" alt="" style="width: 26px; height:26px;margin-right: 18px;">
+                Điểu khiển
+              </div>
+              <img src="static/site/assest/right.png" style="width: 26px; height:26px" alt="">
+            </div>
+          </a></li>
+          <li onClick=logOut()  class="dropdown-item" id="log out" style="padding: 8px;color: black;">
+            <div style="display: flex;justify-content: space-between;margin-left:24px;">
+              <div style="display:flex;justify-content:flex-start">
+                <img src="static/site/assest/logout.png" alt="" style="width: 26px; height:26px;margin-right: 18px;">
+                Đăng xuất
+              </div>
+              <img src="static/site/assest/right.png" style="width: 26px; height:26px;margin-right: 24px;" alt="">
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+  </nav>
+  <style>
+    .dropdown-menu[data-bs-popper] {
+      top: 100%;
+      left:-322px;
+      margin-top: var(--bs-dropdown-spacer);
+    } 
+    .dropdown-item:hover{
+      background:none
+    }
+    .user-image{
+      /* background: yellow; */
+      width: 50px;
+      height: 50px;
+      border-radius: 100%;    
+      padding:9px;
+    }
+    .firstname {
+      font-size:20px;
+      text-align:center;
+    }
+    
+    .dropdown-item:hover{
+      background-color:rgb(233, 229, 229);
+    }
+  </style>
+  <script>
+    if(localStorage.getItem("User")){
+      let url = '/historyConvert-'+JSON.parse(localStorage.getItem("User"))._id;
+      document.getElementById("history").setAttribute("href", url);
+      let settingurl = '/setting-'+JSON.parse(localStorage.getItem("User"))._id;
+      document.getElementById("setting").setAttribute("href", settingurl);
+
+      let firstname = document.getElementsByClassName("firstname")
+      for(let i = 0; i < firstname.length;i++){
+        firstname[i].innerHTML = JSON.parse(localStorage.getItem("User")).username[0]
+      }
+      let userimage = document.getElementsByClassName("user-image")
+      for(let i = 0; i < userimage.length;i++){
+        userimage[i].style.background='#'+localStorage.getItem("color")
+      }
+      document.getElementById("username").innerHTML = JSON.parse(localStorage.getItem("User")).username
+      document.getElementById("email").innerHTML = JSON.parse(localStorage.getItem("User")).email
+    }
+    function changeColor(){
+      document.getElementById("drop").style.boxShadow = "none"
+      console.log("a")
+    }
+    function logOut(){
+      localStorage.removeItem("User")
+      localStorage.removeItem("color")
+      if(!localStorage.getItem("User")){
+        document.getElementById("account").style.display="none"
+        document.getElementById("login").innerHTML = `<div> 
+          <a href="/login" style="color:black;font-size:18px"">Login</a>  
+        <div>`
+      }
+    }
+    if(!localStorage.getItem("User")){
+        document.getElementById("account").style.display="none"
+        document.getElementById("login").innerHTML = `<div> 
+          <a href="/login" style="color:black;font-size:18px"">Login</a>  
+        <div>`
+      }
+    
+     
+  </script>
+  

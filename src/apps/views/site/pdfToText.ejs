@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+	<%-include("components/head.ejs") %>
+	<style>
+		.btn-check{
+			position: relative;
+		}
+		@keyframes example {
+			from {
+				height:360px;
+			}
+			to {
+				height: 760px;
+			}
+		}
+		@keyframes add {
+			from {
+				height:760px;
+			}
+			to {
+				height: 360px;
+			}
+			}
+		.animation-delete{
+			animation-name:example;
+			animation-duration: 1s;
+	
+		}
+		.animation-add{
+			animation-name:add;
+			animation-duration: 1s;
+		}
+		#imageToText:hover{
+			text-decoration: none;
+			background-color:rgb(13,172,177);
+			border-radius:4px
+	
+		}
+		#imageToText:hover #imgText{
+			color:white
+		}
+		#pdfToText:hover{
+			text-decoration: none;
+			background-color:rgb(55 137 220);
+			border-radius:4px
+		}
+		#pdfToText:hover #pdfText{
+			color:white
+		}
+	</style>
+<script>
+	let day = new Date()
+	localStorage.setItem("day",day.getHours() + ":" + day.getMinutes() + ":" + day.getSeconds())
+    if(!localStorage.getItem("convert_count")){
+        localStorage.setItem("convert_count",3)
+		
+    }
+	else{
+		if(localStorage.getItem("User")){
+			let user = localStorage.getItem("User")
+			if(JSON.parse(user).PriceId){
+				localStorage.setItem("convert_count",JSON.parse(localStorage.getItem("User")).convertCount)
+			}
+		}
+	}
+	let date = localStorage.getItem("day")
+	let hour = localStorage.getItem("day").slice(0,1)
+	console.log(hour)
+	if(hour == "0"){
+		localStorage.setItem("convert_count",3)
+		if(localStorage.getItem("User")){
+			let user = localStorage.getItem("User")
+			if(JSON.parse(user).PriceId){
+				localStorage.setItem("convert_count",JSON.parse(localStorage.getItem("User")).convertCount)
+			}
+		}
+	}
+</script>
+<body>
+	<%-include("components/header.ejs") %>
+	  <!-- For demo purpose -->
+	  <section class="py-5 text-white">
+		<div class="container py-4">
+		  <div class="row">
+			<div class="col-lg-8 mx-auto text-center" style="display:flex;justify-content:center">
+				<div style="background:rgb(55 137 220);width:36px;height:36px;padding:3px;border-radius: 3px;margin-top: -4px;">
+					<img src="static/site/assest/pdfwhite.png" alt="" style="width: 30px;height: 30px;">
+				</div>
+				  <p class="display-4" style="margin-left:20px;color:black;font-family:Source Sans Pro, Helvetica, Arial, sans-serif;-webkit-font-smoothing: antialiased;font-weight: 600;font-size:22px">CHUYỂN ĐỔI PDF SANG VĂN BẢN</p>	 
+				</div>			 
+			</div>
+		  </div>
+		  <div class="row pt-5">
+			<div class="col-lg-10 mx-auto">
+			</div>
+		  </div>
+		</div>
+	  </section>
+	  <!-- End -->
+	  <form
+      role="form"
+      id="frmUploader"
+      enctype="multipart/form-data"
+      action="/pdfToWord"
+      method="post"
+	  style="margin-top:-26px"
+	  onsubmit="return checkPost()"
+    >
+	<div class="container" style="border:3px dashed rgba(2, 2, 2, 0.15);border-radius:40px;background-color: rgb(55 137 220); box-shadow: 0px 0px 5px 2px rgba(0,0,0,0.5);">
+		<div id="error" style="margin:auto;text-align:center;color:white"></div>
+
+		<div class="row it">
+		<div class="col-sm-offset-1 col-sm-10" id="one">
+		<p style="color:white">
+		Please upload documents only in 'pdf'
+		</p><br>
+		<img src="static/site/assest/pdf.png" width="100px" height="70px" alt="" style="margin-left:405px">
+		<div id="uploader" style="margin-left: 330px;width: 800px;">
+		<div class="row uploadDoc">
+		  <div class="col-sm-3">
+			<div class="docErr">Please upload valid file</div><!--error-->
+			<div class="fileUpload btn btn-orange" style="height:54px;width:235px;background-color:white">
+		
+			  <span class="upl" id="upload" style="font-weight:bold;padding:10px;color:black;font-size:20px">Choose file</span>
+			  <input name = "image" type="file" class="upload up" id="up" onchange="readURL(this);" />
+			</div><!-- btn-orange -->
+		  </div><!-- col-3 -->
+		  <div class="col-sm-8">
+			
+		  </div><!--col-8-->
+		
+		</div><!--row-->
+		</div><!--uploader-->
+		<div class="text-center">
+			<select name="lan" style="width:320px;border-radius: 12px;padding: 4px;margin-top: 20px;margin-left: 60px;">
+				<option value='afr'     > Afrikaans             </option>
+				<option value='ara'     > Arabic                </option>
+				<option value='aze'     > Azerbaijani           </option>
+				<option value='bel'     > Belarusian            </option>
+				<option value='ben'     > Bengali               </option>
+				<option value='bul'     > Bulgarian             </option>
+				<option value='cat'     > Catalan               </option>
+				<option value='ces'     > Czech                 </option>
+				<option value='chi_sim' > Chinese               </option>
+				<option value='chi_tra' > Traditional Chinese   </option>
+				<option value='chr'     > Cherokee              </option>
+				<option value='dan'     > Danish                </option>
+				<option value='deu'     > German                </option>
+				<option value='ell'     > Greek                 </option>
+				<option value='eng'     selected> English       </option>
+				<option value='enm'     > English (Old)         </option>
+				<option value='meme'    > Internet Meme         </option>
+				<option value='epo'     > Esperanto             </option>
+				<option value='epo_alt' > Esperanto alternative </option>
+				<option value='equ'     > Math                  </option>
+				<option value='est'     > Estonian              </option>
+				<option value='eus'     > Basque                </option>
+				<option value='fin'     > Finnish               </option>
+				<option value='fra'     > French                </option>
+				<option value='frk'     > Frankish              </option>
+				<option value='frm'     > French (Old)          </option>
+				<option value='glg'     > Galician              </option>
+				<option value='grc'     > Ancient Greek         </option>
+				<option value='heb'     > Hebrew                </option>
+				<option value='hin'     > Hindi                 </option>
+				<option value='hrv'     > Croatian              </option>
+				<option value='hun'     > Hungarian             </option>
+				<option value='ind'     > Indonesian            </option>
+				<option value='isl'     > Icelandic             </option>
+				<option value='ita'     > Italian               </option>
+				<option value='ita_old' > Italian (Old)         </option>
+				<option value='jpn'     > Japanese              </option>
+				<option value='kan'     > Kannada               </option>
+				<option value='kor'     > Korean                </option>
+				<option value='lav'     > Latvian               </option>
+				<option value='lit'     > Lithuanian            </option>
+				<option value='mal'     > Malayalam             </option>
+				<option value='mkd'     > Macedonian            </option>
+				<option value='mlt'     > Maltese               </option>
+				<option value='msa'     > Malay                 </option>
+				<option value='nld'     > Dutch                 </option>
+				<option value='nor'     > Norwegian             </option>
+				<option value='pol'     > Polish                </option>
+				<option value='por'     > Portuguese            </option>
+				<option value='ron'     > Romanian              </option>
+				<option value='rus'     > Russian               </option>
+				<option value='slk'     > Slovakian             </option>
+				<option value='slv'     > Slovenian             </option>
+				<option value='spa'     > Spanish               </option>
+				<option value='spa_old' > Old Spanish           </option>
+				<option value='sqi'     > Albanian              </option>
+				<option value='srp'     > Serbian (Latin)       </option>
+				<option value='swa'     > Swahili               </option>
+				<option value='swe'     > Swedish               </option>
+				<option value='tam'     > Tamil                 </option>
+				<option value='tel'     > Telugu                </option>
+				<option value='tgl'     > Tagalog               </option>
+				<option value='tha'     > Thai                  </option>
+				<option value='tur'     > Turkish               </option>
+				<option value='ukr'     > Ukrainian             </option>
+				<option value='vie'     > Vietnamese            </option>
+			</select>
+			<input type="hidden" name="user" id="user">
+
+		<button type="submit" style="background-color: transparent;border: none;"><a class="btn btn-next" style="color: #fff"><i class="fa fa-paper-plane"></i> Submit</a></button>
+		</div>
+		</div><!--one-->
+		</div><!-- row -->
+		</div><!-- container -->
+    </form>
+	
+	<div style="display:flex;justify-content: center;max-width: 1200px;margin:auto">
+		<div class = "ListTool" style="max-width:350px;margin:auto;margin-top:100px;padding:20px">
+			<img src="static/site/assest/light.svg" alt="" style="max-width: 48px;margin:auto;height: 48px;">
+			<p style="color:black;line-height:30px;margin-top: 20px;">
+				Chuyển đổi hình ảnh thành văn bản. Trích xuất văn bản từ hình ảnh , ảnh chụp và các hình ảnh khác. Trình chuyển đổi OCR miễn phí này cho phép bạn lấy văn bản từ tập tin hình ảnh và chuyển nó thành tập tin TXT văn bản thuần túy.
+			</p>
+		</div>
+
+
+		<div class = "ListTool" style="max-width:350px;margin:auto;margin-top:100px;padding:20px">
+			<img src="static/site/assest/medal.svg" alt="" style="max-width: 48px;margin:auto;height: 48px;">
+			<p style="color:black;line-height:30px;margin-top: 20px;">
+				Hiện tại chúng tôi hỗ trợ chuyển đổi tập tin có định dạng hình ảnh thành văn bản sau: JPG thành văn bản, PNG thành văn bản, TIFF thành văn bản, SVG thành văn bản, BMP thành văn bản, WEBP thành văn bản, và nhiều hơn nữa!
+			</p>
+		</div>
+
+		<div class = "ListTool" style="max-width:350px;margin:auto;margin-top:100px;padding:20px">
+			<img src="static/site/assest/lock.svg" alt="" style="max-width: 48px;margin:auto;height: 48px;">
+			<p style="color:black;line-height:30px;margin-top: 20px;">
+				Tất cả các tài liệu được tải lên trong tài khoản "Khách" miễn phí sẽ tự động bị xóa sau khi chuyển đổi. Tệp đầu ra cho người dùng đã đăng ký được lưu trữ một tháng
+			</p>
+		</div>
+	</div>
+	<p style="margin-top:60px;font-size: 26px;font-weight:bold">
+		Tìm hiểu thêm về OCR
+	</p>
+	<div style="display:flex;justify-content: center;max-width: 1200px;margin:auto;margin-top:-70px">
+		<div class = "ListTool listOcr" style="max-width:350px;margin:auto;margin-top:100px;padding:20px;border:1px solid #ccc;height:360px">
+			
+			<img src="static/site/assest/ocr1.png" alt="" style="max-width: 120px;margin:auto;height: 120px;">
+			<p style="font-weight: bold;color:black;font-size: 18px;">OCR là gì và cách để bạn
+				OCR một ảnh?</p>
+			<div class="ocr" style="height: 700px;overflow: hidden;">
+				<p style="color:black;line-height:30px;margin-top: 20px;">
+					Bạn cần số hóa tài liệu? Chỉ cần ngồi lại và xem phần mềm OCR của chúng tôi thực hiện màn ảo thuật! Công cụ OCR sẽ tự động quét tài liệu của bạn để tìm văn bản có thể nhận diện được trên ảnh.
+					Bạn thậm chí có thể sử dụng máy ảnh của điện thoại để chụp ảnh tài liệu hoặc trang giấy để xử lý tệp tin cho phần mềm OCR của chúng tôi. Sau đó phần mềm của chúng tôi sẽ nhận diện văn bản trên tệp tin ảnh và chuyển đổi tệp tin của bạn thành định dạng tài liệu khả chuyển (PDF). Sau đó bạn có thể chỉnh sửa phông chữ hoặc văn bản trên tệp tin này một cách dễ dàng và tùy chỉnh PDF mới được tạo ra theo yêu cầu tệp tin của bạn.				</p>
+			</div>
+			<div style="display:flex;justify-content: flex-start;">
+				<button class="btn-down" onclick=openText() style="color:red;border:none;background-color:#fff">Xem thêm</button>
+				<img class="img-down" src="static/site/assest/downred.png" alt="" style="width:20px;height:20px;margin-left: 6px;margin-top: 4px;">
+			</div>
+
+			
+		</div>
+
+		<div class = "ListTool listOcr" style="max-width:350px;margin:auto;margin-top:100px;padding:20px;border:1px solid #ccc;height:360px">
+
+			<img src="static/site/assest/ocr2.png" alt="" style="max-width: 120px;margin:auto;height: 120px;">
+			<p style="font-weight: bold;color:black;font-size: 18px;">Quét và nhận diện thông tin trên ảnh			</p>
+			<div class="ocr" style="height: 700px;overflow: hidden;">
+				<p style="color:black;line-height:30px;margin-top: 20px;">
+					Bạn có rất nhiều tệp tin cần nhận diện và chuyển đổi bằng OCR? Đừng lo! LKConvert cho phép bạn nhận diện hàng loạt văn bản từ nhiều tệp tin cùng một lúc! Chuyển đổi một ảnh thành văn bản hoặc nhiều ảnh thành tài liệu PDR có thể nhận diện được văn bản, cho phép bạn chỉnh sửa tài liệu đã quét một cách dễ dàng và tránh việc phải đánh máy lại tài liệu trên ứng dụng Microsoft Word hoặc một ứng dụng khác.
+					Xin lưu ý rằng máy OCR của chúng tôi không chỉ nhận diện được ngôn ngữ tiếng Anh. Công cụ OCR của chúng tôi còn nhận diện được cả văn bản từ ảnh được viết bằng các ngôn ngữ khác như: Tiếng Pháp, tiếng Tây Ban Nha, tiếng Bồ Đào Nha,... </p>
+			</div>
+			<div style="display:flex;justify-content: flex-start;">
+				<button class="btn-down" onclick=openText() style="color:red;border:none;background-color:#fff">Xem thêm</button>
+				<img class="img-down" src="static/site/assest/downred.png" alt="" style="width:20px;height:20px;margin-left: 6px;margin-top: 4px;">
+			</div>
+			
+		</div>
+
+		<div class = "ListTool listOcr" style="max-width:350px;margin:auto;margin-top:100px;padding:20px;border:1px solid #ccc;height:360px">
+
+			<img src="static/site/assest/ocr3.png" alt="" style="max-width: 120px;margin:auto;height: 120px;">
+			<p style="font-weight: bold;color:black;font-size: 18px;">Tạo tệp tin PDF bằng cách sử dụng OCR hoặc từ tệp tin trống
+			</p>
+			<div class="ocr" style="height: 700px;overflow: hidden;">
+				<p style="color:black;line-height:30px;margin-top: 20px;">
+					Sản phẩm nhận diện OCR của chúng tôi chỉ là một trong nhiều cách để bạn định dạng văn bản theo nhu cầu của mình. Hãy dùng thử công cụ PDF Creator trực tuyến tiện lợi của chúng tôi để tạo các tệp tin PDF mới từ ảnh, tài liệu, từ đầu hoặc thậm chí từ các trang tính excel chỉ trong vài giây! Tiết kiệm thời gian và tạo một tệp tin gốc hoặc các trang cho tệp tin PDF của bạn bằng một bước thật đơn giản. Bạn cần chỉnh sửa, tạo, chuyển đổi, phối, tách hoặc ký chữ ký điện tử cho các tệp tin PDF của mình? Dịch vụ trực tuyến của chúng tôi cũng có thể hỗ trợ các nhu cầu tài liệu khác của bạn, theo cách trực tuyến hoặc ngoại tuyến.
+			</div>
+			<div style="display:flex;justify-content: flex-start;">
+				<button class="btn-down" onclick=openText() style="color:red;border:none;background-color:#fff">Xem thêm</button>
+				<img class="img-down" src="static/site/assest/downred.png" alt="" style="width:20px;height:20px;margin-left: 6px;margin-top: 4px;">
+			</div>
+			
+		</div>
+
+	</div>
+
+	<div style="border-top:0.5px solid #ccc;margin-top:60px;padding:50px">
+		<div class="listTool" style="display:flex;justify-content: space-around;max-width: 1200px;margin:auto">
+			<a href="/" id="imageToText" style="display:flex;color:black;padding:8px">
+				<div style="background:rgb(13,172,177);width:36px;height:36px;padding:3px;border-radius: 3px;margin-top: 3px;">
+					<img src="static/site/assest/img.png" alt="" style="width: 30px;height: 30px;">
+				</div>
+				<p id="imgText" style="margin-left: 10px;margin-top: 8px;">Ảnh sang văn bản</p>
+			</a>
+			<a href="/pdf" id="pdfToText" style="display:flex;color:black;padding:8px">
+				<div style="background:rgb(55 137 220);width:36px;height:36px;padding:3px;border-radius: 3px;margin-top: 3px;">
+					<img src="static/site/assest/pdfwhite.png" alt="" style="width: 30px;height: 30px;">
+				</div>
+				<p id="pdfText" style="margin-left: 10px;margin-top: 8px;">PDF sang văn bản</p>
+			</a>
+		</div>
+	</div>
+
+	<%-include("components/footer.ejs") %>
+
+</body>
+<script>
+	if(localStorage.getItem("User")){
+		console.log(JSON.parse(localStorage.getItem("User")).username)
+		document.getElementById("user").value = JSON.parse(localStorage.getItem("User"))._id
+	}
+	let btn = document.getElementsByClassName("btn-down");
+	let img = document.getElementsByClassName("img-down");
+	for(let i=0; i<btn.length; i++){
+		btn[i].onclick = function(){
+			console.log(i)
+			let list = document.getElementsByClassName("listOcr")
+			if(list[i].style.height != "760px"){
+				list[i].classList.add("animation-delete")
+				list[i].classList.remove("animation-add")
+				list[i].style.height = "760px"
+				btn[i].innerHTML="Ẩn bớt"
+				img[i].setAttribute("src","static/site/assest/up.png")
+			}
+			else{
+				console.log("a")
+				list[i].classList.remove("animation-delete")
+				list[i].classList.add("animation-add")
+				list[i].style.height = "360px"
+				btn[i].innerHTML="Xem thêm"
+				img[i].setAttribute("src","static/site/assest/downred.png")
+
+			}
+		}
+	}
+	async function checkPost(){
+		let count = localStorage.getItem("convert_count");
+		if(count == 0){
+			event.preventDefault();
+			document.getElementById("error").innerHTML = "Bạn đã dùng hết lần chuyển đổi ngày hôm nay"
+			return false
+		}
+		else{
+			count-=1;
+			localStorage.setItem("convert_count", count)
+		}
+		let nameFile = document.getElementById("up").value
+		for(let i = nameFile.length;i>=0;i--){
+            if(nameFile[i]=='.'){
+                chr = i
+                break;
+            }
+        }
+		let checkFile =  nameFile.substring(chr,nameFile.length)
+		var fileTypes = ".pdf"  
+		if(checkFile != fileTypes){
+			event.preventDefault();
+			document.getElementById("error").innerHTML = "Không thể định dạng file đuôi "+checkFile
+			return false;
+		}
+	}
+	
+</script>	
+</html>

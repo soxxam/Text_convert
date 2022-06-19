@@ -30,7 +30,6 @@
     "pdf-page-counter": "^1.0.3",
     "pdf-poppler": "^0.2.1",
     "pdf2pic": "^2.1.4",
-    "serve": "^13.0.2",
     "store2": "^2.13.2",
     "tesseract.js": "^2.1.5",
     "util": "^0.12.4"

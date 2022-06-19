@@ -455,7 +455,7 @@ const postPay = async(req, res) => {
             "payment_method": "paypal"
         },
         "redirect_urls": {
-            "return_url": "http://localhost:3000/success",
+            "return_url": "https://"+url+"/success",
             "cancel_url": "/cancel"
         },
         "transactions": [{

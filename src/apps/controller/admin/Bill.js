@@ -2,6 +2,8 @@ const BillModel = require('../../models/Bill')
 const UserModel = require('../../models/Users')
 const PriceModel = require('../../models/Price')
 const paginate = require('../../middlewares/paginate')
+var excel = require('excel4node');
+var workbook = new excel.Workbook();
 
 const index = async(req,res)=>{
     const page = parseInt(req.query.page) || 1;

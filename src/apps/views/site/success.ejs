@@ -94,32 +94,32 @@
   }
 	</style>
 <script>
-	let day = new Date()
-	localStorage.setItem("day",day.getHours() + ":" + day.getMinutes() + ":" + day.getSeconds())
-    if(!localStorage.getItem("convert_count")){
-        localStorage.setItem("convert_count",3)
+	// let day = new Date()
+	// localStorage.setItem("day",day.getHours() + ":" + day.getMinutes() + ":" + day.getSeconds())
+    // if(!localStorage.getItem("convert_count")){
+    //     localStorage.setItem("convert_count",3)
 		
-    }
-	else{
-		if(localStorage.getItem("User")){
-			let user = localStorage.getItem("User")
-			if(JSON.parse(user).PriceId){
-				localStorage.setItem("convert_count",JSON.parse(localStorage.getItem("User")).convertCount)
-			}
-		}
-	}
-	let date = localStorage.getItem("day")
-	let hour = localStorage.getItem("day").slice(0,1)
-	console.log(hour)
-	if(hour == "0"){
-		localStorage.setItem("convert_count",3)
-		if(localStorage.getItem("User")){
-			let user = localStorage.getItem("User")
-			if(JSON.parse(user).PriceId){
-				localStorage.setItem("convert_count",JSON.parse(localStorage.getItem("User")).convertCount)
-			}
-		}
-	}
+    // }
+	// else{
+	// 	if(localStorage.getItem("User")){
+	// 		let user = localStorage.getItem("User")
+	// 		if(JSON.parse(user).PriceId){
+	// 			localStorage.setItem("convert_count",JSON.parse(localStorage.getItem("User")).convertCount)
+	// 		}
+	// 	}
+	// }
+	// let date = localStorage.getItem("day")
+	// let hour = localStorage.getItem("day").slice(0,1)
+	// console.log(hour)
+	// if(hour == "0"){
+	// 	localStorage.setItem("convert_count",3)
+	// 	if(localStorage.getItem("User")){
+	// 		let user = localStorage.getItem("User")
+	// 		if(JSON.parse(user).PriceId){
+	// 			localStorage.setItem("convert_count",JSON.parse(localStorage.getItem("User")).convertCount)
+	// 		}
+	// 	}
+	// }
 </script>
 <body>
     <div style="margin: auto;align-items: center">
@@ -145,7 +145,7 @@
             userId,
         })
         localStorage.setItem("User",JSON.stringify(data.data.user));
-        window.location.href="/home"
-}
+        window.location.href="/"
+	}
 </script>
 </html>

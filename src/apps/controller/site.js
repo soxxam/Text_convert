@@ -14,7 +14,9 @@ const paypal  =  require('paypal-rest-sdk');
 const BillModel = require('../models/Bill')
 const ejs = require("ejs")
 const transporter = require("../../common/transporter");
-const paginate = require("../middlewares/paginate")
+const paginate = require("../middlewares/paginate");
+const ReviewModel = require("../models/Review")
+const ReportModel = require("../models/Report")
 
 var getPrice;
 const home = async = async(req,res)=>{
@@ -91,25 +93,34 @@ const uploadImage = async(req,res)=>{
         name:nameImg,
         img:arrImg,
         numfile: totalFile,
-        user_id: userId,
         day:today,
         type:"picture",
     }
     if(userId){
+        img["user_id"] =  userId,
         img["isUserSet"] = true;
         let user = await UserModel.findOne({_id:userId})
         let totalFile = user.totalFileConvert
-        totalFile = totalFile+1;
         let users = {
             totalFileConvert:totalFile
         }
+        totalFile = totalFile+1;
+        let dayEnd = user.dayEnd
+        let btDate = (new Date(today) - new Date(dayEnd))/1000
+        console.log(btDate)
+        if(new Date(dayEnd) == new Date(today) || btDate > 0){
+            users["PriceId"] = null;
+        }
+        
         await UserModel.updateOne({_id :userId},{$set:users});
     }
     let convert = {
         "totalFile":parseInt(totalFile)+1,
     };
     await ConvertModel.updateOne({_id :convertImage._id},{$set:convert});
+    console.log(img)
     new ImageModel(img).save((err,result)=>{
+        console.log(result)
         id = result._id;
         res.redirect('/convert'+id,);
     })
@@ -273,17 +284,25 @@ const pdfToWord = async (req,res)=>{
             console.log('dataWritten')
         }
     })    
-    img["user_id"] = userId;
     img["day"] = today
     if(userId){
+        img["user_id"] =  userId,
         img["isUserSet"] = true;
         let user = await UserModel.findOne({_id:userId})
-        console.log(user)
         let totalFile = user.totalFileConvert
-        totalFile = totalFile+1;
         let users = {
             totalFileConvert:totalFile
         }
+        totalFile = totalFile+1;
+        let dayEnd = user.dayEnd
+        let btDate = (new Date(today) - new Date(dayEnd))/1000
+        console.log(btDate)
+        if(new Date(dayEnd) == new Date(today) || btDate > 0){
+            users["PriceId"] = null;
+            users["dayBuy"] = null;
+            users["dayEnd"] = null
+        }
+        
         await UserModel.updateOne({_id :userId},{$set:users});
     }
     img["type"] = "pdf";
@@ -416,14 +435,18 @@ const postPay = async(req, res) => {
     let dd = today.getDate();
     if (dd < 10) dd = '0' + dd;
     if (mm < 10) mm = '0' + mm;
+    let endMonth  = parseInt(mm) + 1
     today = yyyy + "-" + mm + '-' + dd 
+    dayEnd = yyyy + "-" + '0'+endMonth + '-' + dd 
     let name = req.body.priceName;
     let price = req.body.pricePrice;
-
+    const url = req.get('Host')
+    console.log(url)
     let user = {
         PriceId : req.body.priceId,
         dayBuy: today,
-        convertCount:200
+        convertCount:200,
+        dayEnd : dayEnd
     }
     getPrice = price.toString();
     const create_payment_json = {
@@ -513,7 +536,6 @@ const success = async(req, res)=>{
             console.log(error.response);
             throw error;
         } else {
-            console.log(JSON.stringify(payment));
             res.render("site/success");
         }
     });
@@ -524,6 +546,64 @@ const checkSuccess =async (req, res) => {
     const user = await UserModel.findOne({_id:req.body.userId})
     res.json({msg:"Success",user})
 }
+
+const postReview = async (req, res) => {
+    let today = new Date();
+    const yyyy = today.getFullYear();
+    let mm = today.getMonth() + 1; 
+    let dd = today.getDate();
+    if (dd < 10) dd = '0' + dd;
+    if (mm < 10) mm = '0' + mm;
+    today = yyyy + "-" + mm + '-' + dd 
+    const convert = await ConvertModel.findOne({name:"Ảnh Sang Văn Bản"})
+    const review = {
+        convertId : convert._id,
+        rate : req.body.rate,
+        comment : req.body.comment,
+        day:today
+    }
+    new ReviewModel(review).save();
+    res.redirect('/imageToText')
+    
+    
+}
+const postReviewPdf = async(req,res)=>{
+    let today = new Date();
+    const yyyy = today.getFullYear();
+    let mm = today.getMonth() + 1; 
+    let dd = today.getDate();
+    if (dd < 10) dd = '0' + dd;
+    if (mm < 10) mm = '0' + mm;
+    today = yyyy + "-" + mm + '-' + dd 
+    const convert = await ConvertModel.findOne({name:"PDF Sang Văn Bản"})
+    const review = {
+        convertId : convert._id,
+        rate : req.body.rate,
+        comment : req.body.comment,
+        day:today
+    }
+    new ReviewModel(review).save();
+    res.redirect('/pdfToText')
+}
+const report = async(req, res) => {
+    let today = new Date();
+    const yyyy = today.getFullYear();
+    let mm = today.getMonth() + 1; 
+    let dd = today.getDate();
+    if (dd < 10) dd = '0' + dd;
+    if (mm < 10) mm = '0' + mm;
+    today = yyyy + "-" + mm + '-' + dd 
+    const id = req.params.id
+    const rep = {
+        userId : id,
+        comment:req.body.comment,
+        day:today
+    }
+    new ReportModel(rep).save();
+    res.redirect("/setting-"+id)
+    
+}
+
 module.exports ={
     download,
     imageToText,
@@ -546,6 +626,9 @@ module.exports ={
     postPay,
     success,
     checkSuccess,
-    mail
+    mail,
+    postReview,
+    postReviewPdf,
+    report
 }
 

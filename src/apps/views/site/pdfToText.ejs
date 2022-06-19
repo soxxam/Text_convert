@@ -53,16 +53,13 @@
 	localStorage.setItem("day",day.getHours() + ":" + day.getMinutes() + ":" + day.getSeconds())
     if(!localStorage.getItem("convert_count")){
         localStorage.setItem("convert_count",3)
-		
+        if(localStorage.getItem("User")){
+        let user = localStorage.getItem("User")
+        if(JSON.parse(user).PriceId){
+          localStorage.setItem("convert_count",JSON.parse(localStorage.getItem("User")).convertCount)
+        }
+      }
     }
-	else{
-		if(localStorage.getItem("User")){
-			let user = localStorage.getItem("User")
-			if(JSON.parse(user).PriceId){
-				localStorage.setItem("convert_count",JSON.parse(localStorage.getItem("User")).convertCount)
-			}
-		}
-	}
 	let date = localStorage.getItem("day")
 	let hour = localStorage.getItem("day").slice(0,1)
 	console.log(hour)
@@ -76,6 +73,8 @@
 		}
 	}
 </script>
+<script src="/static/admin/assets/js/checkDate.js"></script>
+
 <body>
 	<%-include("components/header.ejs") %>
 	  <!-- For demo purpose -->
@@ -288,6 +287,16 @@
 
 	</div>
 
+	<h3 style="text-align:center;margin-top:100px" >Đánh giá của bạn</h3>
+	<div style="margin-top:100px !important;max-width:1000px;margin:auto;">
+		<form action="/postReviewPdf" method="post" >
+			<div>
+				<input type="number" name="rate" min="1" max="5" style="border-radius: 10px;margin-left:460px;margin-bottom: 20px;">
+				<textarea style="border-radius:20px" id="comment" name="comment" class="form-control" placeholder="Xin hãy gửi lời đánh giá" rows="4"></textarea> 
+			</div>
+			<button type="submit" style="margin-top:60px;border-radius: 10px;margin-left:435px;margin-bottom: 20px;width:120px;height:40px" class="btn btn-primary">Gửi</button>
+		</form>
+	</div>
 	<div style="border-top:0.5px solid #ccc;margin-top:60px;padding:50px">
 		<div class="listTool" style="display:flex;justify-content: space-around;max-width: 1200px;margin:auto">
 			<a href="/" id="imageToText" style="display:flex;color:black;padding:8px">
@@ -345,7 +354,7 @@
 			return false
 		}
 		else{
-			count-=1;
+			count=count-1;
 			localStorage.setItem("convert_count", count)
 		}
 		let nameFile = document.getElementById("up").value

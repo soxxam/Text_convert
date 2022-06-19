@@ -16,9 +16,6 @@
 		localStorage.setItem("day",day.getHours() + ":" + day.getMinutes() + ":" + day.getSeconds())
 		if(!localStorage.getItem("convert_count")){
 			localStorage.setItem("convert_count",3)
-			
-		}
-		else{
 			if(localStorage.getItem("User")){
 				let user = localStorage.getItem("User")
 				if(JSON.parse(user).PriceId){

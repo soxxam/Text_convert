@@ -26,15 +26,12 @@
         localStorage.setItem("day",day.getHours() + ":" + day.getMinutes() + ":" + day.getSeconds())
         if(!localStorage.getItem("convert_count")){
             localStorage.setItem("convert_count",3)
-            
-        }
-        else{
             if(localStorage.getItem("User")){
-                let user = localStorage.getItem("User")
-                if(JSON.parse(user).PriceId){
-                    localStorage.setItem("convert_count",JSON.parse(localStorage.getItem("User")).convertCount)
-                }
+            let user = localStorage.getItem("User")
+            if(JSON.parse(user).PriceId){
+            localStorage.setItem("convert_count",JSON.parse(localStorage.getItem("User")).convertCount)
             }
+        }
         }
         let date = localStorage.getItem("day")
         let hour = localStorage.getItem("day").slice(0,1)
@@ -49,6 +46,7 @@
             }
         }
     </script>
+    <script src="/static/admin/assets/js/checkDate.js"></script>
 </head>
 <body class="is-boxed has-animations">
     <div class="body-wrap boxed-container">

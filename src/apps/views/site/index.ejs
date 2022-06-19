@@ -47,22 +47,104 @@
 	#pdfToText:hover #pdfText{
 		color:white
 	}
+	.rating {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		width: 150px;
+		height: 30px;
+		padding: 5px 10px;
+		margin: auto;
+		border-radius: 30px;
+		background: #FFF;
+		display: block;
+		overflow: hidden;
+		
+		box-shadow: 0 1px #CCC,
+					0 5px #DDD,
+					0 9px 6px -3px #999;
+		
+		unicode-bidi: bidi-override;
+		direction: rtl;
+		}
+		.rating:not(:checked) > input {
+		display: none;
+		}
+
+		/* - - - - - RATE */
+		#rate {
+		top: -65px;
+		}
+		#rate:not(:checked) > label {
+		cursor:pointer;
+		float: right;
+		width: 30px;
+		height: 30px;
+		display: block;
+		
+		color: rgba(0, 135, 211, .4);
+		line-height: 33px;
+		text-align: center;
+		}
+		#rate:not(:checked) > label:hover,
+		#rate:not(:checked) > label:hover ~ label {
+		color: rgba(0, 135, 211, .6);
+		}
+		#rate > input:checked + label:hover,
+		#rate > input:checked + label:hover ~ label,
+		#rate > input:checked ~ label:hover,
+		#rate > input:checked ~ label:hover ~ label,
+		#rate > label:hover ~ input:checked ~ label {
+		color: rgba(0, 135, 211, .8);
+		}
+		#rate > input:checked ~ label {
+		color: rgb(0, 135, 211);
+		}
+		/* - - - - - LIKE */
+		#like {
+		bottom: -65px;
+		}
+		#like:not(:checked) > label {
+		cursor:pointer;
+		float: right;
+		width: 30px;
+		height: 30px;
+		display: block;
+		
+		color: rgba(233, 54, 40, .4);
+		line-height: 33px;
+		text-align: center;
+		}
+		#like:not(:checked) > label:hover,
+		#like:not(:checked) > label:hover ~ label {
+		color: rgba(233, 54, 40, .6);
+		}
+		#like > input:checked + label:hover,
+		#like > input:checked + label:hover ~ label,
+		#like > input:checked ~ label:hover,
+		#like > input:checked ~ label:hover ~ label,
+		#like > label:hover ~ input:checked ~ label {
+		color: rgba(233, 54, 40, .8);
+		}
+		#like > input:checked ~ label {
+		color: rgb(233, 54, 40);
+		}
 </style>
 <script>
 	let day = new Date()
 	localStorage.setItem("day",day.getHours() + ":" + day.getMinutes() + ":" + day.getSeconds())
     if(!localStorage.getItem("convert_count")){
         localStorage.setItem("convert_count",3)
-		
-    }
-	else{
 		if(localStorage.getItem("User")){
 			let user = localStorage.getItem("User")
 			if(JSON.parse(user).PriceId){
 				localStorage.setItem("convert_count",JSON.parse(localStorage.getItem("User")).convertCount)
 			}
 		}
-	}
+		
+    }
 	let date = localStorage.getItem("day")
 	let hour = localStorage.getItem("day").slice(0,1)
 	console.log(hour)
@@ -76,6 +158,8 @@
 		}
 	}
 </script>
+<script src="/static/admin/assets/js/checkDate.js"></script>
+
 <body>
 	<%-include("components/header.ejs") %>
 	  <!-- For demo purpose -->
@@ -196,7 +280,7 @@
 		</div>
 		</div><!--one-->
 		</div><!-- row -->
-	</div>
+		</div>
 		</div><!-- container -->
     </form>
 	<div style="display:flex;justify-content: center;max-width: 1200px;margin:auto">
@@ -278,6 +362,17 @@
 
 	</div>
 
+	<h3 style="text-align:center;margin-top:100px" >Đánh giá của bạn</h3>
+	<div style="margin-top:100px !important;max-width:1000px;margin:auto;">
+		<form method="post" action="/postReview">
+			<div>
+				<input type="number" name="rate" min="1" max="5" style="border-radius: 10px;margin-left:460px;margin-bottom: 20px;">
+				<textarea style="border-radius:20px" id="comment" name="comment" class="form-control" placeholder="Xin hãy gửi lời đánh giá" rows="4"></textarea> 
+			</div>
+			<button type="submit" style="margin-top:60px;border-radius: 10px;margin-left:435px;margin-bottom: 20px;width:120px;height:40px" class="btn btn-primary">Gửi</button>
+		</form>
+	</div>
+
 	<div style="border-top:0.5px solid #ccc;margin-top:60px;padding:50px">
 		<div class="listTool" style="display:flex;justify-content: space-around;max-width: 1200px;margin:auto">
 			<a href="/" id="imageToText" style="display:flex;color:black;padding:8px">
@@ -345,26 +440,28 @@
 			return false
 		}
 		else{
-			count-=1;
+			console.log("a")
+			count=count-1;
 			localStorage.setItem("convert_count", count)
 		}
 
-		let nameFile = document.getElementById("up").value
-		for(let i = nameFile.length;i>=0;i--){
-            if(nameFile[i]=='.'){
-                chr = i
-                break;
-            }
-        }
-		let checkFile =  nameFile.substring(chr,nameFile.length)
-		var fileTypes = [ '.jpg', '.jpeg', '.png',];  
-		for(let i = 0; i < fileTypes.length;i++){
-			if(checkFile != fileTypes[i]){
-				event.preventDefault();
-				document.getElementById("error").innerHTML = "Không thể định dạng file đuôi "+checkFile
-				return false;
-			}
-		}
+		// let nameFile = document.getElementById("up").value
+		// for(let i = nameFile.length;i>=0;i--){
+        //     if(nameFile[i]=='.'){
+        //         chr = i
+        //         break;
+        //     }
+        // }
+		// let checkFile =  nameFile.substring(chr,nameFile.length)
+		// var fileTypes = [ '.jpg', '.jpeg', '.png',];  
+		// console.log(checkFile)
+		// for(let i = 0; i < fileTypes.length;i++){
+		// 	if(checkFile != fileTypes[i]){
+		// 		event.preventDefault();
+		// 		document.getElementById("error").innerHTML = "Không thể định dạng file đuôi "+checkFile
+		// 		return false;
+		// 	}
+		// }
 	}
 		
 	

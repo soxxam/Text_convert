@@ -21,6 +21,10 @@ const UserSchema = new mongoose.Schema({
         type:String,
         default:null
     },
+    dayEnd:{
+        type:String,
+        default:null
+    },
     convertCount:{
         type:Number,
         default:0

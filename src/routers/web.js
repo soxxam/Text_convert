@@ -11,8 +11,11 @@ const AdminUserController = require('../apps/controller/admin/User')
 const AuthMiddlewares = require("../apps/middlewares/auth")
 const FileController = require("../apps/controller/admin/File")
 const BillController = require("../apps/controller/admin/Bill")
+const ReviewController = require("../apps/controller/admin/Review")
+const ReportController = require("../apps/controller/admin/Report")
 
-router.get('/home',SiteController.home)
+
+router.get('/',SiteController.home)
 router.get('/imageToText',SiteController.imageToText)
 router.post('/upload', UploadMiddlewares.upload.array("image"),SiteController.uploadImage)
 router.get('/convert:id',SiteController.Convert)
@@ -55,9 +58,9 @@ router.get("/success",SiteController.success)
 router.post("/checkSuccess",SiteController.checkSuccess)
 
 router.get('/mail',SiteController.mail);
-
-
-
+router.post("/postReview",SiteController.postReview)
+router.post('/postReviewPdf',SiteController.postReviewPdf)
+router.post('/report-:id',SiteController.report)
 
 // admin
 
@@ -115,4 +118,17 @@ router.post("/admin/file/deleteFile-:id",AuthMiddlewares.checkAdmin,FileControll
 router.get("/admin/bill/index",AuthMiddlewares.checkAdmin,BillController.index)
 router.get("/admin/bill/edit-:id",AuthMiddlewares.checkAdmin,BillController.edit)
 router.get("/admin/bill/searchMonth",AuthMiddlewares.checkAdmin,BillController.searchMonth)
+
+//admin-review 
+
+router.get("/admin/review/index",AuthMiddlewares.checkAdmin,ReviewController.index)
+router.get("/admin/review/edit-:id",AuthMiddlewares.checkAdmin,ReviewController.edit)
+router.post("/admin/review/delete-:id",AuthMiddlewares.checkAdmin,ReviewController.del)
+
+//admin-report
+
+router.get("/admin/report/index",AuthMiddlewares.checkAdmin,ReportController.index)
+router.get("/admin/report/edit-:id",AuthMiddlewares.checkAdmin,ReportController.edit)
+router.post("/admin/report/delete-:id",AuthMiddlewares.checkAdmin,ReportController.del)
+
 module.exports = router;

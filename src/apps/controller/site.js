@@ -45,7 +45,12 @@ const uploadImage = async(req,res)=>{
     let arrImg = []
 
     let p = 'src/public/site/imageToText/'+totalFile
-    fs.mkdirSync(p)
+    try {
+        fs.mkdirSync(p)
+    } catch (error) {
+        
+    }
+    
     const files = req.files;
     await forEach(files,async(file)=>{
         let name = file.originalname;
@@ -200,7 +205,12 @@ const pdfToWord = async (req,res)=>{
     let arrStr=[]
     let arrImg = []
     let p = 'src/public/site/pdfToText/'+totalFile
-    fs.mkdirSync(p)
+    try {
+        fs.mkdirSync(p)
+    } catch (error) {
+        
+    }
+
     fs.readdirSync(p).forEach((item,index) => {
         beforeAdd++;
     });
@@ -455,7 +465,7 @@ const postPay = async(req, res) => {
             "payment_method": "paypal"
         },
         "redirect_urls": {
-            "return_url": "https://"+url+"/success",
+            "return_url": "http://localhost:3000/success",
             "cancel_url": "/cancel"
         },
         "transactions": [{

@@ -1,4 +1,4 @@
-var fileTypes = [ 'jpg', 'jpeg', 'png',];  //acceptable file types
+var fileTypes = [ 'jpg', 'jpeg', 'png','pdf'];  //acceptable file types
 function readURL(input) {
     let list = document.getElementsByClassName("upl")
     for(let i = 0;i<list.length;i++){
